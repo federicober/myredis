@@ -3,6 +3,7 @@ use crate::types::TypedValue;
 use super::types;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct Database {
     data: HashMap<String, types::TypedValue>,
 }

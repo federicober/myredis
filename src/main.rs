@@ -1,10 +1,8 @@
 mod database;
 mod parser;
+mod server;
 pub mod types;
 
 fn main() {
-    let mut db = database::Database::new();
-    parser::do_command(&mut db, parser::parse("SET foo bar").unwrap());
-    let value = parser::do_command(&mut db, parser::parse("GET foo").unwrap());
-    println!("{value:?}");
+    server::serve("127.0.0.1", 8000)
 }

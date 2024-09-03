@@ -27,13 +27,23 @@ pub fn parse(text: &str) -> Result<Command, &str> {
     }
 }
 
-pub fn do_command(db: &mut Database, command: Command) -> Option<&TypedValue> {
+pub fn execute_command(db: &mut Database, command: Command) -> Option<&TypedValue> {
     match command {
         Command::Set { key, value } => {
             db.set(key, value);
             None
         }
         Command::Get { key } => db.get(key),
+    }
+}
+
+pub fn execute(db: &mut Database, command: &str) -> String {
+    match parse(&command) {
+        Ok(parsed_command) => {
+            let res = execute_command(db, parsed_command);
+            format!("{res:?}")
+        }
+        Err(e) => String::from(e),
     }
 }
 
@@ -171,7 +181,7 @@ mod tests {
     #[test]
     fn insert_and_delete() {
         let mut db = Database::new();
-        do_command(
+        execute_command(
             &mut db,
             Command::Set {
                 key: String::from("foo"),
@@ -179,7 +189,7 @@ mod tests {
             },
         );
         assert_eq!(
-            do_command(
+            execute_command(
                 &mut db,
                 Command::Get {
                     key: String::from("foo")
