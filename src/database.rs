@@ -14,11 +14,11 @@ impl Database {
             data: HashMap::new(),
         }
     }
-    pub fn set(&mut self, key: String, value: TypedValue) {
-        self.data.insert(key, value);
+    pub fn set(&mut self, key: &str, value: TypedValue) {
+        self.data.insert(key.to_string(), value);
     }
-    pub fn get(&mut self, key: String) -> Option<&types::TypedValue> {
-        self.data.get(&key)
+    pub fn get(&mut self, key: &str) -> Option<&types::TypedValue> {
+        self.data.get(&key.to_string())
     }
 }
 
@@ -29,12 +29,9 @@ mod tests {
     #[test]
     fn insert_and_delete() {
         let mut db = Database::new();
-        db.set(
-            String::from("foo"),
-            types::TypedValue::Text(String::from("bar")),
-        );
+        db.set("foo", types::TypedValue::Text(String::from("bar")));
         assert_eq!(
-            db.get(String::from("foo")),
+            db.get("foo"),
             Some(&types::TypedValue::Text(String::from("bar")))
         )
     }
